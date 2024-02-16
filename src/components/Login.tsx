@@ -13,6 +13,7 @@ const Login = () => {
     });
     const authUrl = `https://accounts.spotify.com/authorize?${queryParams}`;
     window.location.href = authUrl;
+
   };
 
   return (
