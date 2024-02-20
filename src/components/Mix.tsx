@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import "../App.css";
 const currentToken = {
   get access_token() {
     return localStorage.getItem("access_token") || null;
@@ -93,14 +93,15 @@ function Mix() {
     <>
       {currentToken.access_token && (
         <div>
-          <h1>Logged in as {currentToken.userProfile?.display_name}</h1>
+          <h1 id="loggedIn">
+            Logged in as {currentToken.userProfile?.display_name}
+          </h1>
 
-          <h2>Top 10 Tracks from the Last Months</h2>
-          <ul></ul>
-          <ul>
+          <h2 id="trackFrom">Top 10 Tracks from the Last Months</h2>
+          <ul className="topTracks">
             {topTracks.map((track: any, index: number) => (
               <li key={index}>
-                {index + 1}. {track.name} by {track.artists[0].name}
+                {index + 1}. {track.name} - {track.artists[0].name}
               </li>
             ))}
           </ul>
