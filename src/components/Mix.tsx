@@ -1,5 +1,14 @@
 import { useEffect, useState } from "react";
 import "../App.css";
+
+const clientSecret = "477ae9886eb54377a797884030593168";
+const clientId = "9d34b1f66cb14b4cbdf6f6ee27a35f12";
+const redirectUrl = "http://localhost:5173/callback";
+const authorizationEndpoint = "https://accounts.spotify.api/authorize";
+const scope =
+  "user-read-private user-read-email user-top-read user-follow-read user-library-read";
+const tokenEndpoint = "https://accounts.spotify.com/api/token";
+
 const currentToken = {
   get access_token() {
     return localStorage.getItem("access_token") || null;
@@ -24,12 +33,50 @@ const currentToken = {
     localStorage.setItem("expires_in", expires_in);
 
     const now = new Date();
-    const expiry = new Date(now.getTime() + expires_in * 1000);
+    const expiry = new Date(now.getTime() + expires_in * 1000000);
     localStorage.setItem("expires", expiry.toString());
   },
   saveUserProfile: function (userProfile: any) {
     localStorage.setItem("user_profile", JSON.stringify(userProfile));
   },
+};
+
+const getToken = async (code: string) => {
+  const code_verifier = localStorage.getItem("code_verifier");
+  const response = await fetch(tokenEndpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      client_secret: clientSecret,
+      client_id: clientId,
+      grant_type: "authorization_code",
+      code: code,
+      scope: scope,
+      redirect_uri: redirectUrl,
+      code_verifier: code_verifier!,
+    }),
+  });
+
+  return await response.json();
+};
+
+const refreshToken = async () => {
+  const response = await fetch(tokenEndpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      client_secret: clientSecret,
+      client_id: clientId,
+      grant_type: "refresh_token",
+      refresh_token: currentToken.refresh_token!,
+    }),
+  });
+
+  return await response.json();
 };
 
 const getUserProfile = async () => {
@@ -43,8 +90,35 @@ const getUserProfile = async () => {
   return await response.json();
 };
 
+function getDate() {
+  const today = new Date();
+  const month = today.toLocaleString("default", { month: "long" });
+
+  return `${month}`;
+}
+
 function Mix() {
   const [topTracks, setTopTracks] = useState<any[]>([]);
+  const [currentDate, setCurrentDate] = useState(getDate());
+
+  useEffect(() => {
+    const getCode = async () => {
+      const args = new URLSearchParams(window.location.search);
+      const code = args.get("code");
+      if (code) {
+        const token = await getToken(code);
+        currentToken.save(token);
+
+        const url = new URL(window.location.href);
+        url.searchParams.delete("code");
+
+        const updatedUrl = url.search ? url.href : url.href.replace("?", "");
+        window.history.replaceState({}, document.title, updatedUrl);
+      }
+    };
+    getCode();
+  }, []);
+  /// pulls users top tracks
 
   useEffect(() => {
     const fetchTopTracks = async () => {
@@ -69,6 +143,15 @@ function Mix() {
     };
     if (currentToken.access_token) {
       fetchTopTracks();
+    } else if (currentToken.refresh_token) {
+      refreshToken()
+        .then((token) => {
+          currentToken.save(token);
+          fetchTopTracks();
+        })
+        .catch((error) => {
+          console.error("Error refreshing token:", error);
+        });
     }
   }, [currentToken.access_token]);
 
@@ -93,18 +176,53 @@ function Mix() {
     <>
       {currentToken.access_token && (
         <div>
-          <h1 id="loggedIn">
-            Logged in as {currentToken.userProfile?.display_name}
-          </h1>
+          <div>
+            <h2 id="trackFrom">Top 10 Tracks from the Last Month</h2>
+            <div className="cd-case">
+              <h3 id="title">
+                {currentToken.userProfile?.display_name}'s {currentDate} mix
+                tape
+              </h3>
+              <ul className="topTracks">
+                {topTracks.map((track: any, index: number) => (
+                  <li key={index}>
+                    {index + 1}. {track.name} - {track.artists[0].name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          {/*
+          <div id="disk">
+            <div id="divvy">
+              {" "}
+              <ul className="topTracks">
+                {topTracks.map((track: any, index: number) => (
+                  <li key={index}>
+                    {index + 1}. {track.name} - {track.artists[0].name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <img src="cd.png" id="ciddy" />
+                </div>*/}
+          <div className="project-box__inner">
+            <div className="project-box__image">
+              <img
+                className="project-box__image__sleeve"
+                src="https://d1x26sjkwh9vok.cloudfront.net/uploads/thumbnail/20190202/large_thumbnail_4a804336-58d3-4948-8a76-7623b8f4632a.png"
+                width="220"
+                height="220"
+              />
 
-          <h2 id="trackFrom">Top 10 Tracks from the Last Months</h2>
-          <ul className="topTracks">
-            {topTracks.map((track: any, index: number) => (
-              <li key={index}>
-                {index + 1}. {track.name} - {track.artists[0].name}
-              </li>
-            ))}
-          </ul>
+              <img
+                className="project-box__image__vinyl"
+                src="cd.png"
+                width="220"
+                height="220"
+              />
+            </div>
+          </div>
         </div>
       )}
     </>
