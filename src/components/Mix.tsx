@@ -121,6 +121,15 @@ function Mix() {
   /// pulls users top tracks
 
   useEffect(() => {
+    /*for (let i = 1; i < 8; i++) {
+      document.getElementById(`track-${i}`)!.style.top = `${Math.sin(
+        Math.PI * (i * 10) * 2
+      )}px`;
+      document.getElementById(`track-${i}`)!.style.left = `${Math.cos(
+        Math.PI * (i * 10) * 2
+      )}px`;
+    }*/
+
     const fetchTopTracks = async () => {
       try {
         const response = await fetch(
@@ -153,6 +162,14 @@ function Mix() {
           console.error("Error refreshing token:", error);
         });
     }
+    /*for (let i = 1; i < 8; i++) {
+      document.getElementById(`track-${i}`)!.style!.top = `${Math.sin(
+        Math.PI * (i * 10) * 2
+      )}px`;
+      document.getElementById(`track-${i}`)!.style!.left = `${Math.cos(
+        Math.PI * (i * 10) * 2
+      )}px`;
+    }*/
   }, [currentToken.access_token]);
 
   //// Pulls users profile information,, use this to display "user's mix"
@@ -172,59 +189,70 @@ function Mix() {
     }
   }, [currentToken.access_token]);
 
+  function handleLogout() {
+    localStorage.clear();
+    window.location.href = "/";
+  }
   return (
     <>
       {currentToken.access_token && (
         <div>
           <div>
-            <h2 id="trackFrom">Top 10 Tracks from the Last Month</h2>
-            <div className="cd-case">
-              <h3 id="title">
-                {currentToken.userProfile?.display_name}'s {currentDate} mix
-                tape
-              </h3>
-              <ul className="topTracks">
-                {topTracks.map((track: any, index: number) => (
-                  <li key={index}>
-                    {index + 1}. {track.name} - {track.artists[0].name}
-                  </li>
-                ))}
-              </ul>
+            <h2 id="trackFrom">Top 10 tracks from the last month</h2>
+          </div>
+          <div id="bar"></div>
+          <div className="cover">
+            <h2 id="title">
+              {currentToken.userProfile?.display_name}'s {currentDate} mix tape
+            </h2>
+            <ul id="listy">
+              {topTracks.map((track: any, index: number) => (
+                <li
+                  style={{
+                    position: "absolute",
+                    top: `${Math.sin(Math.PI * (index * 100) * 20)}px`,
+                    left: `${Math.cos(Math.PI * (index * 100) * 20)}px`,
+                  }}
+                  key={index}
+                  id={`track-${index}`}
+                >
+                  {index + 1}. {track.name} - {track.artists[0].name}
+                </li>
+              ))}
+            </ul>
+            <div className="cd">
+              <img src="cd.png" width="350" height="350" />
             </div>
           </div>
           {/*
-          <div id="disk">
-            <div id="divvy">
-              {" "}
-              <ul className="topTracks">
-                {topTracks.map((track: any, index: number) => (
-                  <li key={index}>
-                    {index + 1}. {track.name} - {track.artists[0].name}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <img src="cd.png" id="ciddy" />
-                </div>*/}
           <div className="project-box__inner">
             <div className="project-box__image">
-              <img
-                className="project-box__image__sleeve"
-                src="https://d1x26sjkwh9vok.cloudfront.net/uploads/thumbnail/20190202/large_thumbnail_4a804336-58d3-4948-8a76-7623b8f4632a.png"
-                width="220"
-                height="220"
-              />
+          
+              <div className="project-box__image__sleeve">
+                <h2 id="title">
+                  {currentToken.userProfile?.display_name}'s {currentDate} mix
+                  tape
+                </h2>
+                <ul id="listy">
+                  {topTracks.map((track: any, index: number) => (
+                    <li key={index}>
+                      {index + 1}. {track.name} - {track.artists[0].name}
+                    </li>
+                  ))}{" "}
+                </ul>
+              </div>
 
               <img
                 className="project-box__image__vinyl"
                 src="cd.png"
-                width="220"
+                width="320"
                 height="220"
               />
             </div>
-          </div>
+                  </div>*/}
         </div>
       )}
+      <button onClick={handleLogout}>Log Out</button>
     </>
   );
 }
