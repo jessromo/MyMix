@@ -4,7 +4,6 @@ import "../App.css";
 const clientSecret = "477ae9886eb54377a797884030593168";
 const clientId = "9d34b1f66cb14b4cbdf6f6ee27a35f12";
 const redirectUrl = "http://localhost:5173/callback";
-const authorizationEndpoint = "https://accounts.spotify.api/authorize";
 const scope =
   "user-read-private user-read-email user-top-read user-follow-read user-library-read";
 const tokenEndpoint = "https://accounts.spotify.com/api/token";
@@ -224,8 +223,7 @@ function Mix() {
               <img src="cd.png" width="350" height="350" />
             </div>
           </div>
-          {/*
-          <div className="project-box__inner">
+          {/* <div className="project-box__inner">
             <div className="project-box__image">
           
               <div className="project-box__image__sleeve">
