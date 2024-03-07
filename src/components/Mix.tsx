@@ -161,14 +161,7 @@ function Mix() {
           console.error("Error refreshing token:", error);
         });
     }
-    /*for (let i = 1; i < 8; i++) {
-      document.getElementById(`track-${i}`)!.style!.top = `${Math.sin(
-        Math.PI * (i * 10) * 2
-      )}px`;
-      document.getElementById(`track-${i}`)!.style!.left = `${Math.cos(
-        Math.PI * (i * 10) * 2
-      )}px`;
-    }*/
+ 
   }, [currentToken.access_token]);
 
   //// Pulls users profile information,, use this to display "user's mix"
@@ -192,6 +185,7 @@ function Mix() {
     localStorage.clear();
     window.location.href = "/";
   }
+ 
   return (
     <>
       {currentToken.access_token && (
@@ -223,31 +217,6 @@ function Mix() {
               <img src="cd.png" width="350" height="350" />
             </div>
           </div>
-          {/* <div className="project-box__inner">
-            <div className="project-box__image">
-          
-              <div className="project-box__image__sleeve">
-                <h2 id="title">
-                  {currentToken.userProfile?.display_name}'s {currentDate} mix
-                  tape
-                </h2>
-                <ul id="listy">
-                  {topTracks.map((track: any, index: number) => (
-                    <li key={index}>
-                      {index + 1}. {track.name} - {track.artists[0].name}
-                    </li>
-                  ))}{" "}
-                </ul>
-              </div>
-
-              <img
-                className="project-box__image__vinyl"
-                src="cd.png"
-                width="320"
-                height="220"
-              />
-            </div>
-                  </div>*/}
         </div>
       )}
       <button onClick={handleLogout}>Log Out</button>
