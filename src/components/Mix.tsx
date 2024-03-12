@@ -120,15 +120,6 @@ function Mix() {
   /// pulls users top tracks
 
   useEffect(() => {
-    /*for (let i = 1; i < 8; i++) {
-      document.getElementById(`track-${i}`)!.style.top = `${Math.sin(
-        Math.PI * (i * 10) * 2
-      )}px`;
-      document.getElementById(`track-${i}`)!.style.left = `${Math.cos(
-        Math.PI * (i * 10) * 2
-      )}px`;
-    }*/
-
     const fetchTopTracks = async () => {
       try {
         const response = await fetch(
@@ -161,7 +152,6 @@ function Mix() {
           console.error("Error refreshing token:", error);
         });
     }
- 
   }, [currentToken.access_token]);
 
   //// Pulls users profile information,, use this to display "user's mix"
@@ -185,13 +175,13 @@ function Mix() {
     localStorage.clear();
     window.location.href = "/";
   }
- 
+
   return (
     <>
       {currentToken.access_token && (
         <div>
           <div>
-            <h2 id="trackFrom">Top 10 tracks from the last month</h2>
+           <h2 id="trackFrom">Top 10 tracks from the last month</h2>
           </div>
           <div id="bar"></div>
           <div className="cover">
@@ -200,15 +190,7 @@ function Mix() {
             </h2>
             <ul id="listy">
               {topTracks.map((track: any, index: number) => (
-                <li
-                  style={{
-                    position: "absolute",
-                    top: `${Math.sin(Math.PI * (index * 100) * 20)}px`,
-                    left: `${Math.cos(Math.PI * (index * 100) * 20)}px`,
-                  }}
-                  key={index}
-                  id={`track-${index}`}
-                >
+                <li key={index} id={`track-${index}`}>
                   {index + 1}. {track.name} - {track.artists[0].name}
                 </li>
               ))}
@@ -219,7 +201,7 @@ function Mix() {
           </div>
         </div>
       )}
-      <button onClick={handleLogout}>Log Out</button>
+      <button id="logoutbutton" onClick={handleLogout}>Log Out</button>
     </>
   );
 }
