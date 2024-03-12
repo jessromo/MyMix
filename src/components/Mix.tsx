@@ -118,7 +118,7 @@ function Mix() {
     getCode();
   }, []);
   /// pulls users top tracks
-
+  setCurrentDate;
   useEffect(() => {
     const fetchTopTracks = async () => {
       try {
@@ -181,8 +181,8 @@ function Mix() {
       {currentToken.access_token && (
         <div>
           <div>
-           <h2 id="trackFrom">Top 10 tracks from the last month</h2>
-          </div>
+            <h2 id="trackFrom">Top 10 tracks from the last month</h2>
+          </div>{" "}
           <div id="bar"></div>
           <div className="cover">
             <h2 id="title">
@@ -201,7 +201,10 @@ function Mix() {
           </div>
         </div>
       )}
-      <button id="logoutbutton" onClick={handleLogout}>Log Out</button>
+
+      <button id="logoutbutton" onClick={handleLogout}>
+        Log Out
+      </button>
     </>
   );
 }
