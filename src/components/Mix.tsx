@@ -3,7 +3,7 @@ import "../App.css";
 
 const clientSecret = "477ae9886eb54377a797884030593168";
 const clientId = "9d34b1f66cb14b4cbdf6f6ee27a35f12";
-const redirectUrl = "https://mymix.netlify.app/callback/";
+const redirectUrl = "http://localhost:5173/callback";
 
 const scope =
   "user-read-private user-read-email user-top-read user-follow-read user-library-read";
@@ -176,36 +176,75 @@ function Mix() {
     localStorage.clear();
     window.location.href = "/";
   }
-
+  /*
   return (
     <>
       {currentToken.access_token && (
-        <div>
-          <div>
-            <h2 id="trackFrom">Top 10 tracks from the last month</h2>
-          </div>{" "}
-          <div id="bar"></div>
-          <div className="cover">
-            <h2 id="title">
-              {currentToken.userProfile?.display_name}'s {currentDate} mix tape
-            </h2>
-            <ul id="listy">
-              {topTracks.map((track: any, index: number) => (
-                <li key={index} id={`track-${index}`}>
-                  {index + 1}. {track.name} - {track.artists[0].name}
-                </li>
-              ))}
-            </ul>
-            <div className="cd">
-              <img src="cd.png" width="350" height="350" />
+        <div className="everything">
+          <h2 id="tts">Top 10 tracks from the last month</h2>
+          <div className="mixtape">
+            <div id="bar"></div>
+            <div className="case">
+              <h2 id="title">
+                {currentToken.userProfile?.display_name}'s {currentDate} mix
+                tape
+              </h2>
+              <ul id="listy">
+                {topTracks.map((track: any, index: number) => (
+                  <li key={index} id={`track-${index}`}>
+                    {index + 1}. {track.name} - {track.artists[0].name}
+                  </li>
+                ))}
+              </ul>
             </div>
+            <div className="cd">
+              <img src="cd.png" id="cdpic" />
+            </div>
+          </div>
+          <div className="logout">
+            <button id="logoutbutton" onClick={handleLogout}>
+              Log Out
+            </button>
           </div>
         </div>
       )}
-
-      <button id="logoutbutton" onClick={handleLogout}>
-        Log Out
-      </button>
+    </>
+  );*/
+  return (
+    <>
+      {currentToken.access_token && (
+        <div className="container">
+          <div>
+            <h2>Top 10 tracks from the last month</h2>
+          </div>
+          <div className="mixtape">
+            <div className="case">
+              <h2 id="title">
+                {currentToken.userProfile?.display_name}'s {currentDate} mix
+                tape
+              </h2>
+              <div>
+                <ul id="listy">
+                  {topTracks.map((track, index) => (
+                    <li key={index} id={`track-${index}`}>
+                      {index + 1}. {track.name} - {track.artists[0].name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div className="cd">
+              <img src="cd.png" id="cdpic" />
+            </div>
+          
+          </div>
+          <div className="logout">
+              <button id="logoutbutton" onClick={handleLogout}>
+                Log Out
+              </button>
+            </div>
+        </div>
+      )}
     </>
   );
 }

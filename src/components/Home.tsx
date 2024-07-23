@@ -1,7 +1,7 @@
 import queryString from "query-string";
 
 const CLIENT_ID = "9d34b1f66cb14b4cbdf6f6ee27a35f12";
-const REDIRECT_URI = "https://mymix.netlify.app/callback/";
+const REDIRECT_URI = "http://localhost:5173/callback";
 
 const Home = () => {
   const handleLogin = () => {
