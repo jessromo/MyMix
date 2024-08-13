@@ -370,4 +370,7 @@ h2 {
   #cdpic {
     width: 600px;
   }
+  .cd{
+    animation: disk 0.8s forwards;
+  }
 }

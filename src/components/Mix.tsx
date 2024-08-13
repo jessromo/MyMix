@@ -3,7 +3,8 @@ import "../App.css";
 
 const clientSecret = "477ae9886eb54377a797884030593168";
 const clientId = "9d34b1f66cb14b4cbdf6f6ee27a35f12";
-const redirectUrl = "http://localhost:5173/callback";
+/* const redirectUrl = "http://localhost:5176/callback"; */
+const redirectUrl = "https://mymix.netlify.app/callback";
 
 const scope =
   "user-read-private user-read-email user-top-read user-follow-read user-library-read";
@@ -236,13 +237,12 @@ function Mix() {
             <div className="cd">
               <img src="cd.png" id="cdpic" />
             </div>
-          
           </div>
           <div className="logout">
-              <button id="logoutbutton" onClick={handleLogout}>
-                Log Out
-              </button>
-            </div>
+            <button id="logoutbutton" onClick={handleLogout}>
+              Log Out
+            </button>
+          </div>
         </div>
       )}
     </>
