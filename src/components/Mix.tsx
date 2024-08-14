@@ -101,7 +101,7 @@ function getDate() {
 
 function Mix() {
   const [topTracks, setTopTracks] = useState<any[]>([]);
-  const [currentDate, setCurrentDate] = useState(getDate());
+  const [currentDate] = useState(getDate());
   const [timeRange, setTimeRange] = useState("short_term");
 
   useEffect(() => {
@@ -172,11 +172,6 @@ function Mix() {
       fetchUserProfile();
     }
   }, [currentToken.access_token]);
-
-  function handleLogout() {
-    localStorage.clear();
-    window.location.href = "/";
-  }
 
   return (
     <>
