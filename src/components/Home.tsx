@@ -1,5 +1,5 @@
 import queryString from "query-string";
-
+import "../App.css";
 const CLIENT_ID = "9d34b1f66cb14b4cbdf6f6ee27a35f12";
 /*const REDIRECT_URI = "http://localhost:5176/callback";*/
 const REDIRECT_URI = "https://mymix.netlify.app/callback";
@@ -17,11 +17,15 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <h1> MyMix</h1>
-      <h2>A mixtape of your top tracks</h2>
-      <button onClick={handleLogin}>Log in with Spotify</button>
-    </div>
+    <>
+      <div>
+        <div className="">
+          <h1> MyMix</h1>
+        </div>
+        <h2>A mixtape of your top tracks</h2>
+        <button onClick={handleLogin}>Log in with Spotify</button>
+      </div>
+    </>
   );
 };
 

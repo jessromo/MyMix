@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import "../App.css";
+import Nav from "./Nav";
 
 const clientSecret = "477ae9886eb54377a797884030593168";
 const clientId = "9d34b1f66cb14b4cbdf6f6ee27a35f12";
-/* const redirectUrl = "http://localhost:5176/callback"; */
+/*const redirectUrl = "http://localhost:5176/callback";*/
 const redirectUrl = "https://mymix.netlify.app/callback";
 
 const scope =
@@ -101,6 +102,7 @@ function getDate() {
 function Mix() {
   const [topTracks, setTopTracks] = useState<any[]>([]);
   const [currentDate, setCurrentDate] = useState(getDate());
+  const [timeRange, setTimeRange] = useState("short_term");
 
   useEffect(() => {
     const getCode = async () => {
@@ -112,20 +114,20 @@ function Mix() {
 
         const url = new URL(window.location.href);
         url.searchParams.delete("code");
-
         const updatedUrl = url.search ? url.href : url.href.replace("?", "");
         window.history.replaceState({}, document.title, updatedUrl);
+
+        window.location.reload();
       }
     };
     getCode();
   }, []);
-  /// pulls users top tracks
-  setCurrentDate;
+
   useEffect(() => {
     const fetchTopTracks = async () => {
       try {
         const response = await fetch(
-          "https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=10",
+          `https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=10`,
           {
             method: "GET",
             headers: {
@@ -154,9 +156,7 @@ function Mix() {
           console.error("Error refreshing token:", error);
         });
     }
-  }, [currentToken.access_token]);
-
-  //// Pulls users profile information,, use this to display "user's mix"
+  }, [currentToken.access_token, timeRange]);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -177,71 +177,54 @@ function Mix() {
     localStorage.clear();
     window.location.href = "/";
   }
-  /*
+
   return (
     <>
+      <Nav />
       {currentToken.access_token && (
-        <div className="everything">
-          <h2 id="tts">Top 10 tracks from the last month</h2>
-          <div className="mixtape">
-            <div id="bar"></div>
-            <div className="case">
-              <h2 id="title">
-                {currentToken.userProfile?.display_name}'s {currentDate} mix
-                tape
-              </h2>
-              <ul id="listy">
-                {topTracks.map((track: any, index: number) => (
-                  <li key={index} id={`track-${index}`}>
-                    {index + 1}. {track.name} - {track.artists[0].name}
-                  </li>
-                ))}
-              </ul>
+        <div>
+          <div className="container">
+            <div className="time-range-selector">
+              <button onClick={() => setTimeRange("short_term")}>
+                Last Month
+              </button>
+              <button onClick={() => setTimeRange("medium_term")}>
+                Last 6 Months
+              </button>
+              <button onClick={() => setTimeRange("long_term")}>
+                Last Year
+              </button>
             </div>
-            <div className="cd">
-              <img src="cd.png" id="cdpic" />
-            </div>
-          </div>
-          <div className="logout">
-            <button id="logoutbutton" onClick={handleLogout}>
-              Log Out
-            </button>
-          </div>
-        </div>
-      )}
-    </>
-  );*/
-  return (
-    <>
-      {currentToken.access_token && (
-        <div className="container">
-          <div>
-            <h2>Top 10 tracks from the last month</h2>
-          </div>
-          <div className="mixtape">
-            <div className="case">
-              <h2 id="title">
-                {currentToken.userProfile?.display_name}'s {currentDate} mix
-                tape
+            <div className="title">
+              <h2>
+                Top 10 tracks from the last{" "}
+                {timeRange === "short_term"
+                  ? "month"
+                  : timeRange === "medium_term"
+                  ? "6 months"
+                  : "year"}
               </h2>
-              <div>
-                <ul id="listy">
-                  {topTracks.map((track, index) => (
-                    <li key={index} id={`track-${index}`}>
-                      {index + 1}. {track.name} - {track.artists[0].name}
-                    </li>
-                  ))}
-                </ul>
+            </div>
+            <div className="mixtape">
+              <div className="case">
+                <h2 id="title">
+                  {currentToken.userProfile?.display_name}'s {currentDate} mix
+                  tape
+                </h2>
+                <div className="tracklist">
+                  <ul id="track-list">
+                    {topTracks.map((track, index) => (
+                      <li key={index} id={`track-${index}`}>
+                        {index + 1}. {track.name} - {track.artists[0].name}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="cd">
+                <img src="cd.png" id="cdpic" alt="CD" />
               </div>
             </div>
-            <div className="cd">
-              <img src="cd.png" id="cdpic" />
-            </div>
-          </div>
-          <div className="logout">
-            <button id="logoutbutton" onClick={handleLogout}>
-              Log Out
-            </button>
           </div>
         </div>
       )}
