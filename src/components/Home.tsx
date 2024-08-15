@@ -18,13 +18,14 @@ const Home = () => {
 
   return (
     <>
-      <div>
-        <div className="">
-          <h1> MyMix</h1>
+      <div className="login">
+        <div className="login-title">
+          <h1 > MyMix</h1>
         </div>
-        <h2>A mixtape of your top tracks</h2>
-        <button onClick={handleLogin}>Log in with Spotify</button>
-      </div>
+        <h2 className="quickdesc">A mixtape of your top tracks!</h2>
+        <div className="btn">
+        <button onClick={handleLogin} className="login-btn">Log in with Spotify</button>
+      </div></div>
     </>
   );
 };

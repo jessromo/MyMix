@@ -21,6 +21,7 @@ const Nav = () => {
       <header>
         <div className="nav">
           <div id="links">
+            <Link to="/callback">Home</Link>
             <Link to="/about">About</Link>
             <a href="#logout" onClick={handleLogout}>
               Log Out
